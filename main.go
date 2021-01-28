@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	v := flag.Bool("verbose", false, "") // TODO
+	v := flag.Bool("verbose", false, "") // TODO add one char alias too
 	flag.Parse()
 
 	if *v {

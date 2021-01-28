@@ -5,8 +5,10 @@ A tool which helps in multi device screenshot creation for Flutter projects.
 
 ## Requirements
 1. Go 1.15 or later, to install this project
-2. Flutter Integration tests
-3. Extend Integration tests with screenshot calls
+2. Installed Xcode and simulator
+3. (Optional) Installed Android emulator and avdmanager
+4. Flutter Integration tests
+5. Extend Integration tests with screenshot calls
 
 ## Usage
 ### Install
