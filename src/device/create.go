@@ -56,7 +56,7 @@ func createIosDevice(name, identifier string) (string, error) {
 
 	log.Debugf("Running following command: %s", cmd.String())
 	outputLine := out.String()
-	strings.ReplaceAll(outputLine, "\n\t", "")
+	outputLine = strings.ReplaceAll(outputLine, "\n\t", "")
 	log.Debugf("Got the following output: %s", outputLine)
 	if idRegex.MatchString(outputLine) {
 		log.Infof("Device with name %s successfully created, id is %s", name, outputLine)
