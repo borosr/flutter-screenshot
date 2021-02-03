@@ -1,16 +1,28 @@
 package exec
 
-import "os/exec"
+import (
+	"os"
+	"os/exec"
+)
 
-type Cmd = *exec.Cmd
+type Cmd struct {
+	*exec.Cmd
+}
 
 type CommandExecutor func(string, ...string) Executable
 
 type Executable interface {
 	Run() error
 	String() string
+	Stdout(*os.File)
 }
 
 func Command(name string, args ...string) Executable {
-	return exec.Command(name, args...)
+	return &Cmd{
+		Cmd: exec.Command(name, args...),
+	}
+}
+
+func (c *Cmd) Stdout(f *os.File) {
+	c.Cmd.Stdout = f
 }
