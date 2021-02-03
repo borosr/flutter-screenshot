@@ -1,4 +1,4 @@
-package ios
+package config
 
 import "encoding/json"
 
@@ -54,7 +54,7 @@ type Pair struct {
 	Phone MinimalDevice `json:"phone"`
 }
 
-func UnmarshalConfig(data []byte) (Config, error) {
+func Unmarshal(data []byte) (Config, error) {
 	var c Config
 	err := json.Unmarshal(data, &c)
 

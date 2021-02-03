@@ -1,3 +1,4 @@
 .idea
 go.sum
 vendor/
+*_mock_test.go
