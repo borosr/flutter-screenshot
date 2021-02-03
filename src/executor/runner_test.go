@@ -205,3 +205,39 @@ func TestExecuteDeviceShutdown(t *testing.T) {
 		t.Errorf("error should be %v, instead of %v", shutdownError, err)
 	}
 }
+
+func TestExecuteDeviceCommandExecution(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mockDeviceAction := NewMockDeviceAction(ctrl)
+
+	const deviceName = "iPhone X"
+	deviceID := gofakeit.UUID()
+	instance := Instance{
+		ID:    deviceID,
+		State: StateBooted,
+		Kind:  KindIos,
+	}
+	cmdExecuteError := errors.New("command execution error")
+
+	mockExecutable := NewMockExecutable(ctrl)
+	invoke = mockExecute(mockExecutable)
+
+	mockDeviceAction.EXPECT().List().Return(Pairs{})
+	mockDeviceAction.EXPECT().Create(gomock.Eq(deviceName)).Return(deviceID, KindIos, nil)
+	mockDeviceAction.EXPECT().Boot(gomock.Eq(instance)).Return(nil)
+	mockDeviceAction.EXPECT().WaitUntilBooted(gomock.Eq(instance)).Return(nil)
+	mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Eq(LightTheme)).Return(nil)
+	mockDeviceAction.EXPECT().Shutdown(gomock.Eq(deviceID)).Return(nil)
+	mockExecutable.EXPECT().Run().Return(cmdExecuteError)
+	mockExecutable.EXPECT().String().Return("")
+	mockExecutable.EXPECT().Stdout(gomock.Any()).Return()
+
+	if err := execute([]config.Device{{
+		Name: deviceName,
+		Mode: LightTheme,
+	}}, "", mockDeviceAction); err == nil {
+		t.Error("missing error")
+	} else if !errors.Is(err, cmdExecuteError) {
+		t.Errorf("error should be %v, instead of %v", cmdExecuteError, err)
+	}
+}

@@ -3,10 +3,10 @@ package executor
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 
 	"github.com/borosr/flutter-screenshot/pkg"
+	"github.com/borosr/flutter-screenshot/pkg/exec"
 	"github.com/borosr/flutter-screenshot/pkg/ios"
 	"github.com/borosr/flutter-screenshot/src/config"
 	"github.com/borosr/flutter-screenshot/src/device/types"
@@ -29,6 +29,8 @@ const (
 	errFmtExecuteCmd = "error executing command: %w"
 	errFmtSetEnv = "cannot set %s env to %s"
 )
+
+var invoke exec.CommandExecutor = exec.Command
 
 func Run() error {
 	conf, err := config.Read()
@@ -143,9 +145,16 @@ func setScreenshotSubdirectoryName(d config.Device) error {
 func executeCommand(cmd, deviceID string) error {
 	log.Infof("Executing command %s...", cmd)
 
-	c := exec.Command("/bin/sh", "-c", cmd, "-d", deviceID)
+	c := invoke("/bin/sh", "-c", cmd, "-d", deviceID)
 	log.Debugf("Execute: Executing cmd: %s", c.String())
-	c.Stdout = os.Stdout
+	c.Stdout(os.Stdout)
 
 	return c.Run()
 }
+
+func mockExecute(e exec.Executable) exec.CommandExecutor {
+	return func(_ string, _ ...string) exec.Executable {
+		return e
+	}
+}
+
