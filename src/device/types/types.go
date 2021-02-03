@@ -18,9 +18,9 @@ const (
 type Kind uint8
 
 type Instance struct {
-	ID    string
-	State state
-	Kind  Kind
+	ID    string `json:"id"`
+	State state  `json:"state"`
+	Kind  Kind   `json:"kind"`
 }
 
 // key is the name of the device
@@ -28,6 +28,9 @@ type Instance struct {
 type Pairs map[string]Instance
 
 func (p Pairs) String() string {
+	if p == nil {
+		return "null"
+	}
 	res, err := json.Marshal(p)
 	if err != nil {
 		return `{"error":"` + err.Error() + `"}`
