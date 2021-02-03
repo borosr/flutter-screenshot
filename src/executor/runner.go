@@ -1,6 +1,7 @@
 package executor
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -16,6 +17,17 @@ const (
 	emuDeviceEnv = "EMU_DEVICE"
 	LightTheme   = "light"
 	DarkTheme    = "dark"
+
+	errFmtExecuteIos   = "error running iOS devices: %w"
+	errFmtCreateDevice = "error when creating the device: %w|"
+	errFmtBootDevice   = "error when booting the device: %w|"
+ 	errFmtWaitUntilBooted = "error waiting for simulator boot %w"
+	errFmtSetThemeAndExecute = "setThemeAndExecute error: %w"
+	errFmtShutdownDevice = "shutdown error: %w"
+	errFmtSetThemeDevice = "error setting the theme command: %w"
+	errFmtSetScreenshotSubdirName = "error setScreenshotSubdirectoryName: %w"
+	errFmtExecuteCmd = "error executing command: %w"
+	errFmtSetEnv = "cannot set %s env to %s"
 )
 
 func Run() error {
@@ -26,14 +38,17 @@ func Run() error {
 		return err
 	}
 
-	execute(conf.Devices.IOS, conf.Cmd, ios.New())
+	if err := execute(conf.Devices.IOS, conf.Cmd, ios.New()); err != nil {
+		return fmt.Errorf(errFmtExecuteIos, err)
+	}
 	//execute(conf.Devices.Android, conf.Cmd, android.New())
 
 	return nil
 }
 
-func execute(devices []config.Device, cmd string, device pkg.DeviceAction) {
+func execute(devices []config.Device, cmd string, device pkg.DeviceAction) error {
 	existingDevices := device.List()
+	var loopErr error
 	for _, d := range devices {
 		d.Mode = strings.ToLower(d.Mode)
 		log.Infof("Starting iOS device %s", d.Name)
@@ -43,7 +58,7 @@ func execute(devices []config.Device, cmd string, device pkg.DeviceAction) {
 			id, kind, err := device.Create(d.Name)
 			if err != nil {
 				log.Errorf("Device %s not creatable, maybe misspelled the name, continue with the next device!", d.Name)
-				log.Errorf("Error is: %v", err)
+				loopErr = fmt.Errorf(errFmtCreateDevice, err)
 
 				continue
 			}
@@ -56,58 +71,73 @@ func execute(devices []config.Device, cmd string, device pkg.DeviceAction) {
 
 		log.Infof("Booting device %s %s...", d.Name, instance.ID)
 		if err := device.Boot(instance); err != nil {
-			log.Errorf("Error when booting the device: %v", err)
+			loopErr = fmt.Errorf(errFmtBootDevice, err)
 
 			continue
 		}
 
 		log.Info("Waiting a few seconds to startup...")
 		if err := device.WaitUntilBooted(instance); err != nil {
-			log.Errorf("Error waiting for simulator boot %v", err)
+			loopErr = fmt.Errorf(errFmtWaitUntilBooted, err)
+
+			continue
 		}
 
 		switch {
 		case d.Mode == "both":
 			for _, t := range []string{DarkTheme, LightTheme} {
 				d.Mode = t
-				setThemeAndExecute(device, d, instance, cmd)
+				if err := setThemeAndExecute(device, d, instance, cmd); err != nil {
+					loopErr = fmt.Errorf(errFmtSetThemeAndExecute, err)
+				}
 			}
 		case d.Mode == "":
 			d.Mode = LightTheme
-			setThemeAndExecute(device, d, instance, cmd)
+			if err := setThemeAndExecute(device, d, instance, cmd); err != nil {
+				loopErr = fmt.Errorf(errFmtSetThemeAndExecute, err)
+			}
 		case d.Mode == LightTheme || d.Mode == DarkTheme:
-			setThemeAndExecute(device, d, instance, cmd)
+			if err := setThemeAndExecute(device, d, instance, cmd); err != nil {
+				loopErr = fmt.Errorf(errFmtSetThemeAndExecute, err)
+			}
 		}
 
 		log.Infof("Shutdown the device %s", instance.ID)
 		if err := device.Shutdown(instance.ID); err != nil {
-			log.Errorf("Shutdown error: %v", err)
+			loopErr = fmt.Errorf(errFmtShutdownDevice, err)
 		}
 	}
 
+	return loopErr
 }
 
-func setThemeAndExecute(da pkg.DeviceAction, d config.Device, instance types.Instance, cmd string) {
+func setThemeAndExecute(da pkg.DeviceAction, d config.Device, instance types.Instance, cmd string) error {
 	log.Infof("Set theme to %s at device %s", d.Mode, d.Name)
 	if err := da.SetTheme(instance, d.Mode); err != nil {
-		log.Errorf("Error setting the theme command: %v", err)
+		return fmt.Errorf(errFmtSetThemeDevice, err)
 	}
 
-	setScreenshotSubdirectoryName(d)
-	if err := executeCommand(cmd, instance.ID); err != nil {
-		log.Errorf("Error executing command: %v", err)
-	} else {
-		log.Info("Command successfully executed!")
+	if err := setScreenshotSubdirectoryName(d); err != nil {
+		return fmt.Errorf(errFmtSetScreenshotSubdirName, err)
 	}
+
+	if err := executeCommand(cmd, instance.ID); err != nil {
+		return fmt.Errorf(errFmtExecuteCmd, err)
+	}
+	log.Info("Command successfully executed!")
+
+	return nil
 }
 
-func setScreenshotSubdirectoryName(d config.Device) {
+func setScreenshotSubdirectoryName(d config.Device) error {
 	emuDevName := strings.ReplaceAll(d.Name, " ", "_")
 	subDirName := emuDevName + "_" + d.Mode
 	log.Debugf("Subdiectory name %s", subDirName)
 	if err := os.Setenv(emuDeviceEnv, subDirName); err != nil {
-		log.Errorf("Can't set %s env to %s", emuDeviceEnv, emuDevName)
+		return fmt.Errorf(errFmtSetEnv, emuDeviceEnv, emuDevName)
 	}
+
+	return nil
 }
 
 func executeCommand(cmd, deviceID string) error {
