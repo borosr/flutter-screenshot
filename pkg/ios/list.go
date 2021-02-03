@@ -25,5 +25,6 @@ func (d Device) List() types.Pairs {
 			}
 		}
 	}
+
 	return p
 }
