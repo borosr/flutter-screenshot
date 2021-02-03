@@ -1,7 +1,7 @@
 package exec
 
 import (
-	"os"
+	"io"
 	"os/exec"
 )
 
@@ -14,7 +14,7 @@ type CommandExecutor func(string, ...string) Executable
 type Executable interface {
 	Run() error
 	String() string
-	Stdout(*os.File)
+	Stdout(io.Writer)
 }
 
 func Command(name string, args ...string) Executable {
@@ -23,6 +23,6 @@ func Command(name string, args ...string) Executable {
 	}
 }
 
-func (c *Cmd) Stdout(f *os.File) {
+func (c *Cmd) Stdout(f io.Writer) {
 	c.Cmd.Stdout = f
 }
