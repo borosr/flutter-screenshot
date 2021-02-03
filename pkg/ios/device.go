@@ -2,7 +2,6 @@ package ios
 
 import (
 	"bytes"
-	"os/exec"
 	"regexp"
 	"runtime"
 
@@ -28,12 +27,12 @@ func loadConfig() config.Config {
 
 		return config.Config{Loaded: true}
 	}
-	cmd := exec.Command("xcrun", "simctl", "list", "-j")
+	cmd := execute("xcrun", "simctl", "list", "-j")
 
 	log.Debugf("Running following command: %s", cmd.String())
 
 	var out bytes.Buffer
-	cmd.Stdout = &out
+	cmd.Stdout(&out)
 	if err := cmd.Run(); err != nil {
 		log.Errorf("Error executing command: %v", err)
 
