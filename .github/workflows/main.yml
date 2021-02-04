@@ -22,7 +22,9 @@ jobs:
         run: go build -v ./...
 
       - name: Run mock generation
-        run: make gen
+        run: |
+          go get github.com/golang/mock/mockgen@v1.4.4
+          make gen
 
       - name: Test
         run: go test -v ./...
