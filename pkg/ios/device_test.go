@@ -62,8 +62,8 @@ func TestLoadConfigCmdRunError(t *testing.T) {
 	c := loadConfig()
 	if runtime.GOOS != "darwin" && !c.Loaded {
 		t.Error("config should be loaded on this os")
-	} else if c.Loaded {
-		t.Error("config loading isn't failed")
+	} else if runtime.GOOS == "darwin" && c.Loaded {
+		t.Error("config shouldn't be loaded on mac")
 	}
 }
 
@@ -81,7 +81,7 @@ func TestLoadConfigInvalidFormat(t *testing.T) {
 	c := loadConfig()
 	if runtime.GOOS != "darwin" && !c.Loaded {
 		t.Error("config should be loaded on this os")
-	} else if c.Loaded {
-		t.Error("config loading isn't failed")
+	} else if runtime.GOOS == "darwin" && c.Loaded {
+		t.Error("config shouldn't be loaded on mac")
 	}
 }
