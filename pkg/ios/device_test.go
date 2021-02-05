@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
+	"runtime"
 	"testing"
 
 	"github.com/borosr/flutter-screenshot/pkg/ios/config"
@@ -59,8 +60,10 @@ func TestLoadConfigCmdRunError(t *testing.T) {
 	})
 
 	c := loadConfig()
-	if c.Loaded {
-		t.Error("config loading isn't failed")
+	if runtime.GOOS != "darwin" && !c.Loaded {
+		t.Error("config should be loaded on this os")
+	} else if runtime.GOOS == "darwin" && c.Loaded {
+		t.Error("config shouldn't be loaded on mac")
 	}
 }
 
@@ -76,7 +79,9 @@ func TestLoadConfigInvalidFormat(t *testing.T) {
 	})
 
 	c := loadConfig()
-	if c.Loaded {
-		t.Error("config loading isn't failed")
+	if runtime.GOOS != "darwin" && !c.Loaded {
+		t.Error("config should be loaded on this os")
+	} else if runtime.GOOS == "darwin" && c.Loaded {
+		t.Error("config shouldn't be loaded on mac")
 	}
 }

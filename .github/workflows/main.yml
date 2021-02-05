@@ -1,0 +1,56 @@
+name: Main
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  testing:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-18.04]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+
+      - name: Run mock generation
+        run: |
+          go get github.com/golang/mock/mockgen@v1.4.4
+          make gen
+
+      - name: Test
+        run: go test -v ./...
+
+  coverage:
+    runs-on: ubuntu-18.04 # figure out a solution to use mac
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        if: success()
+        with:
+          go-version: 1.15
+
+      - name: Run mock generation
+        run: |
+          go get github.com/golang/mock/mockgen@v1.4.4
+          make gen
+      - name: Calc coverage
+        run: |
+          go test -v -covermode=count -coverprofile=coverage.out ./...
+      - name: Convert coverage.out to coverage.lcov
+        uses: jandelgado/gcov2lcov-action@v1.0.8
+      - name: Coveralls
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.github_token }}
+          path-to-lcov: coverage.lcov
