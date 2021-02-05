@@ -1,4 +1,7 @@
 # Flutter Screenshot
+![example workflow name](https://github.com/borosr/flutter-screenshot/workflows/Main/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/borosr/flutter-screenshot/badge.svg)](https://coveralls.io/github/borosr/flutter-screenshot)
+
 A tool which helps in multi device screenshot creation for Flutter projects.
 
 **Currently Android is not supported, but it planned in the nearest future!**
