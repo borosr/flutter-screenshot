@@ -22,7 +22,7 @@ func TestPairs_String(t *testing.T) {
 					Kind:  1,
 				},
 			},
-			want: `{"key":{"id":"id","state":1,"kind":1}}`,
+			want: `{"key":{"id":"id","debug_port":"","state":1,"kind":1}}`,
 		},
 	}
 	for _, tt := range tests {

@@ -18,9 +18,10 @@ const (
 type Kind uint8
 
 type Instance struct {
-	ID    string `json:"id"`
-	State state  `json:"state"`
-	Kind  Kind   `json:"kind"`
+	ID        string `json:"id"`
+	DebugPort string `json:"debug_port"`
+	State     state  `json:"state"`
+	Kind      Kind   `json:"kind"`
 }
 
 // key is the name of the device

@@ -13,6 +13,7 @@ type CommandExecutor func(string, ...string) Executable
 
 type Executable interface {
 	Run() error
+	Start() error
 	String() string
 	Stdout(io.Writer)
 }

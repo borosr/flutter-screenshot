@@ -1,4 +1,4 @@
-package ios
+package android
 
 import (
 	"testing"
@@ -6,6 +6,7 @@ import (
 	"github.com/borosr/flutter-screenshot/src/device/types"
 	"github.com/golang/mock/gomock"
 )
+
 
 func TestDevice_Shutdown(t *testing.T) {
 	d := Device{}

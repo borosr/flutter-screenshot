@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/borosr/flutter-screenshot/pkg"
+	"github.com/borosr/flutter-screenshot/pkg/android"
 	"github.com/borosr/flutter-screenshot/pkg/exec"
 	"github.com/borosr/flutter-screenshot/pkg/ios"
 	"github.com/borosr/flutter-screenshot/src/config"
@@ -43,7 +44,9 @@ func Run() error {
 	if err := execute(conf.Devices.IOS, conf.Cmd, ios.New()); err != nil {
 		return fmt.Errorf(errFmtExecuteIos, err)
 	}
-	//execute(conf.Devices.Android, conf.Cmd, android.New())
+	if err := execute(conf.Devices.Android, conf.Cmd, android.New()); err != nil {
+		return fmt.Errorf(errFmtExecuteIos, err)
+	}
 
 	return nil
 }
@@ -105,7 +108,7 @@ func execute(devices []config.Device, cmd string, device pkg.DeviceAction) error
 		}
 
 		log.Infof("Shutdown the device %s", instance.ID)
-		if err := device.Shutdown(instance.ID); err != nil {
+		if err := device.Shutdown(instance); err != nil {
 			loopErr = fmt.Errorf(errFmtShutdownDevice, err)
 		}
 	}

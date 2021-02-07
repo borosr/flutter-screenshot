@@ -8,7 +8,7 @@ import (
 func (d Device) Boot(i types.Instance) error {
 	if i.State == types.StateBooted {
 		log.Infof("%s is already booted, shutting it down", i.ID)
-		if err := d.Shutdown(i.ID); err != nil {
+		if err := d.Shutdown(i); err != nil {
 			return err
 		}
 	}

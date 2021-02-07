@@ -4,12 +4,10 @@
 
 A tool which helps in multi device screenshot creation for Flutter projects.
 
-**Currently Android is not supported, but it planned in the nearest future!**
-
 ## Requirements
 1. Go 1.15 or later, to install this project
 2. Installed Xcode and simulator
-3. (Optional) Installed Android emulator and avdmanager
+3. Installed Android emulator, avdmanager and adb (e.x.: [Command Line Tools](https://developer.android.com/studio#downloads))
 4. Flutter Integration tests
 5. Extend Integration tests with screenshot calls
 
@@ -35,7 +33,8 @@ devices:
       mode: both # can be both, light, dark, the default value is light
     - name: iPad Pro (12.9-inch) (4th generation)
       mode: dark
-  # android: # not supported yet
+  android:
+    - name: Pixel_API_30
 ```
 
 ### In Flutter project

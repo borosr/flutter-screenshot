@@ -1,13 +1,14 @@
-package ios
+package android
 
 import (
+	"io"
 	"testing"
 
 	"github.com/borosr/flutter-screenshot/src/device/types"
 	"github.com/golang/mock/gomock"
 )
 
-func TestDevice_Shutdown(t *testing.T) {
+func TestDevice_WaitUntilBooted(t *testing.T) {
 	d := Device{}
 	ctrl := gomock.NewController(t)
 	mockExecutable := NewMockExecutable(ctrl)
@@ -15,8 +16,11 @@ func TestDevice_Shutdown(t *testing.T) {
 
 	mockExecutable.EXPECT().Run().Return(nil)
 	mockExecutable.EXPECT().String().Return("")
+	mockExecutable.EXPECT().Stdout(gomock.Any()).DoAndReturn(func(w io.Writer) {
+		_, _ = w.Write([]byte(deviceState))
+	})
 
-	if err := d.Shutdown(types.Instance{}); err != nil {
+	if err := d.WaitUntilBooted(types.Instance{}); err != nil {
 		t.Error(err)
 	}
 }
