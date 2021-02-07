@@ -1,6 +1,6 @@
 # Flutter Screenshot
 ![example workflow name](https://github.com/borosr/flutter-screenshot/workflows/Main/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/borosr/flutter-screenshot/badge.svg)](https://coveralls.io/github/borosr/flutter-screenshot)
+[![Coverage Status](https://coveralls.io/repos/github/borosr/flutter-screenshot/badge.svg?branch=main)](https://coveralls.io/github/borosr/flutter-screenshot?branch=main)
 
 A tool which helps in multi device screenshot creation for Flutter projects.
 
