@@ -1,4 +1,4 @@
-package ios
+package android
 
 import (
 	"github.com/borosr/flutter-screenshot/src/device/types"
@@ -6,7 +6,7 @@ import (
 )
 
 func (d Device) Shutdown(i types.Instance) error {
-	cmd := execute("xcrun", "simctl", "shutdown", i.ID)
+	cmd := execute("adb", "-s", "emulator-"+i.DebugPort, "emu", "kill")
 	log.Debugf("Shutdown: Executing cmd: %s", cmd.String())
 
 	return cmd.Run()

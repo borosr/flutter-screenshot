@@ -8,5 +8,5 @@ type DeviceAction interface {
 	Boot(types.Instance) error
 	WaitUntilBooted(types.Instance) error
 	SetTheme(types.Instance, string) error
-	Shutdown(string) error
+	Shutdown(types.Instance) error
 }

@@ -29,7 +29,7 @@ func TestExecuteExistingDevice(t *testing.T) {
 			mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Any()).Return(nil),
 			mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Any()).Return(nil),
 		)
-		mockDeviceAction.EXPECT().Shutdown(gomock.Eq(deviceID)).Return(nil)
+		mockDeviceAction.EXPECT().Shutdown(gomock.Eq(instance)).Return(nil)
 
 		if err := execute([]config.Device{{
 			Name: "iPhone X",
@@ -56,7 +56,7 @@ func TestExecuteNotExistingDevice(t *testing.T) {
 	mockDeviceAction.EXPECT().Boot(gomock.Eq(instance)).Return(nil)
 	mockDeviceAction.EXPECT().WaitUntilBooted(gomock.Eq(instance)).Return(nil)
 	mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Eq(LightTheme)).Return(nil)
-	mockDeviceAction.EXPECT().Shutdown(gomock.Eq(deviceID)).Return(nil)
+	mockDeviceAction.EXPECT().Shutdown(gomock.Eq(instance)).Return(nil)
 
 	if err := execute([]config.Device{{
 		Name: deviceName,
@@ -163,7 +163,7 @@ func TestExecuteDeviceSetThemeError(t *testing.T) {
 			mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Any()).Return(setThemeError),
 			mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Any()).Return(setThemeError),
 		)
-		mockDeviceAction.EXPECT().Shutdown(gomock.Eq(deviceID)).Return(nil)
+		mockDeviceAction.EXPECT().Shutdown(gomock.Eq(instance)).Return(nil)
 
 		if err := execute([]config.Device{{
 			Name: deviceName,
@@ -194,7 +194,7 @@ func TestExecuteDeviceShutdown(t *testing.T) {
 	mockDeviceAction.EXPECT().Boot(gomock.Eq(instance)).Return(nil)
 	mockDeviceAction.EXPECT().WaitUntilBooted(gomock.Eq(instance)).Return(nil)
 	mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Eq(LightTheme)).Return(nil)
-	mockDeviceAction.EXPECT().Shutdown(gomock.Eq(deviceID)).Return(shutdownError)
+	mockDeviceAction.EXPECT().Shutdown(gomock.Eq(instance)).Return(shutdownError)
 
 	if err := execute([]config.Device{{
 		Name: deviceName,
@@ -227,7 +227,7 @@ func TestExecuteDeviceCommandExecution(t *testing.T) {
 	mockDeviceAction.EXPECT().Boot(gomock.Eq(instance)).Return(nil)
 	mockDeviceAction.EXPECT().WaitUntilBooted(gomock.Eq(instance)).Return(nil)
 	mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Eq(LightTheme)).Return(nil)
-	mockDeviceAction.EXPECT().Shutdown(gomock.Eq(deviceID)).Return(nil)
+	mockDeviceAction.EXPECT().Shutdown(gomock.Eq(instance)).Return(nil)
 	mockExecutable.EXPECT().Run().Return(cmdExecuteError)
 	mockExecutable.EXPECT().String().Return("")
 	mockExecutable.EXPECT().Stdout(gomock.Any()).Return()
