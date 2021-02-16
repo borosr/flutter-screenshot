@@ -56,10 +56,10 @@ func execute(devices []config.Device, cmd string, device pkg.DeviceAction) error
 	var loopErr error
 	for _, d := range devices {
 		d.Mode = strings.ToLower(d.Mode)
-		log.Infof("Starting iOS device %s", d.Name)
+		log.Infof("Starting device %s", d.Name)
 		instance, ok := existingDevices[d.Name]
 		if !ok {
-			log.Warnf("Device %s not found in creted list, starting creation...", d.Name)
+			log.Warnf("Device %s not found in created list, starting creation...", d.Name)
 			id, kind, err := device.Create(d.Name)
 			if err != nil {
 				log.Errorf("Device %s not creatable, maybe misspelled the name, continue with the next device!", d.Name)

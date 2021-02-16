@@ -16,6 +16,8 @@ func UnmarshalDevices(data []byte) []string {
 	str := string(regexp.MustCompile("Parsing (.*)\n").
 		ReplaceAll(data, []byte("")))
 
+	str = strings.ReplaceAll(str, "\r", "\n")
+
 	lines := strings.Split(str, "\n")
 	for _, line := range lines {
 		if line != "" {
