@@ -7,10 +7,13 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// ModeBoth is set if the device should start both light and dark modes
+// ModeDark if the device should start in dark mode
+// ModeLight if the device should start in light mode
 const (
 	ModeBoth  deviceMode = "both"
 	ModeDark  deviceMode = "dark"
-	LightDark deviceMode = "light"
+	ModeLight deviceMode = "light"
 )
 
 type deviceMode string

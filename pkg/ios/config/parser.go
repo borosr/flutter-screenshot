@@ -21,7 +21,7 @@ type DeviceType struct {
 	ProductFamily     string `json:"productFamily"`
 }
 
-// DeviceType represents an iOS runtime with details
+// Runtime represents an iOS runtime with details
 type Runtime struct {
 	BundlePath   string `json:"bundlePath"`
 	Buildversion string `json:"buildversion"`
