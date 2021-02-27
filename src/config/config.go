@@ -16,6 +16,8 @@ const (
 	ModeLight deviceMode = "light"
 )
 
+// AllModes stores all the valid modes: light, dark, both
+// BothModes stores the meaning of both modes: light, dark
 var (
 	AllModes  = []string{ModeDark.String(), ModeLight.String(), ModeBoth.String()}
 	BothModes = []string{ModeDark.String(), ModeLight.String()}
