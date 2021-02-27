@@ -16,7 +16,19 @@ const (
 	ModeLight deviceMode = "light"
 )
 
+// AllModes stores all the valid modes: light, dark, both
+// BothModes stores the meaning of both modes: light, dark
+var (
+	AllModes  = []string{ModeDark.String(), ModeLight.String(), ModeBoth.String()}
+	BothModes = []string{ModeDark.String(), ModeLight.String()}
+)
+
 type deviceMode string
+
+// String casts a deviceMode instance to string
+func (dM deviceMode) String() string {
+	return string(dM)
+}
 
 // Data is the highest level of the configuration
 // contains the command for execution
