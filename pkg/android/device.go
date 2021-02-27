@@ -6,10 +6,12 @@ import (
 	"github.com/borosr/flutter-screenshot/pkg/android/config"
 )
 
+// Device represents the Android device action strategy
 type Device struct {
 	Config config.Config
 }
 
+// New is creating a new Android device action strategy
 func New() Device {
 	return Device{
 		Config: loadConfig(),

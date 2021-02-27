@@ -5,6 +5,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Boot is starting an android virtual device
+// passing the types.Instance's DebugPort for future operations
 func (d Device) Boot(i types.Instance) error {
 	log.Infof("Booting device with id %s", i.ID)
 

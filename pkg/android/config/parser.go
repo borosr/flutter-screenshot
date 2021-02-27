@@ -27,4 +27,3 @@ func UnmarshalDevices(data []byte) []string {
 
 	return d
 }
-

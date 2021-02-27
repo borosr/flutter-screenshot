@@ -11,10 +11,12 @@ import (
 
 var idRegex = regexp.MustCompile("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")
 
+// Device represents the iOS device action strategy
 type Device struct {
 	Config config.Config
 }
 
+// New is creating a new iOS device action strategy
 func New() Device {
 	return Device{
 		Config: loadConfig(),

@@ -15,9 +15,11 @@ const (
 )
 
 var (
+	// ErrDeviceCreationInvalidResult is throwing when create method is unable to create a new device
 	ErrDeviceCreationInvalidResult = errors.New("device creation result invalid")
 )
 
+// Create is creating the virtual device based on the passed name
 func (d Device) Create(name string) (string, types.Kind, error) {
 	for _, deviceType := range d.Config.DeviceTypes {
 		if strings.EqualFold(deviceType.Name, name) {

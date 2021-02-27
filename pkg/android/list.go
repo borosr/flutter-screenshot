@@ -7,6 +7,8 @@ import (
 	"github.com/brianvoe/gofakeit/v6"
 )
 
+// List converts the parsed devices to the common format
+// and assign a random debug port to the device between 5555 and 5586
 func (d Device) List() types.Pairs {
 	p := types.Pairs{}
 	for _, device := range d.Config.Devices {

@@ -17,10 +17,10 @@ func TestDevice_Boot(t *testing.T) {
 	mockExecutable.EXPECT().String().Return("")
 
 	if err := d.Boot(types.Instance{
-		ID:    "Pixel_API_30",
+		ID:        "Pixel_API_30",
 		DebugPort: "5555",
-		State: types.StateShutdown,
-		Kind:  types.KindAndroid,
+		State:     types.StateShutdown,
+		Kind:      types.KindAndroid,
 	}); err != nil {
 		t.Error(err)
 	}

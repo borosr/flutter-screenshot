@@ -7,7 +7,6 @@ import (
 	"github.com/golang/mock/gomock"
 )
 
-
 func TestDevice_Shutdown(t *testing.T) {
 	d := Device{}
 	ctrl := gomock.NewController(t)
