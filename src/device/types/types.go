@@ -2,6 +2,8 @@ package types
 
 import "encoding/json"
 
+// StateShutdown represents the shutdown state of a device
+// StateBooted represents the booted (successfully started) state of a device
 const (
 	StateShutdown state = iota
 	StateBooted
@@ -9,12 +11,17 @@ const (
 
 type state uint8
 
+// KindUnknow is the default device kind
+// KindIos if the virtual device is running iOS
+// KindAndroid if the virtual device is running Android
 const (
 	KindUnknow Kind = iota
 	KindIos
 	KindAndroid
 )
 
+// Kind is the kind of the virtual device
+// can be iOS or Android
 type Kind uint8
 
 // Instance represents a virtual device
