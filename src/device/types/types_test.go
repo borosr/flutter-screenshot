@@ -15,7 +15,7 @@ func TestPairs_String(t *testing.T) {
 		},
 		{
 			name: "basic parse test",
-			p:    Pairs{
+			p: Pairs{
 				"key": Instance{
 					ID:    "id",
 					State: 1,

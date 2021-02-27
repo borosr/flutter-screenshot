@@ -19,16 +19,16 @@ const (
 	LightTheme   = "light"
 	DarkTheme    = "dark"
 
-	errFmtExecuteIos   = "error running iOS devices: %w"
-	errFmtCreateDevice = "error when creating the device: %w|"
-	errFmtBootDevice   = "error when booting the device: %w|"
- 	errFmtWaitUntilBooted = "error waiting for simulator boot %w"
-	errFmtSetThemeAndExecute = "setThemeAndExecute error: %w"
-	errFmtShutdownDevice = "shutdown error: %w"
-	errFmtSetThemeDevice = "error setting the theme command: %w"
+	errFmtExecuteIos              = "error running iOS devices: %w"
+	errFmtCreateDevice            = "error when creating the device: %w|"
+	errFmtBootDevice              = "error when booting the device: %w|"
+	errFmtWaitUntilBooted         = "error waiting for simulator boot %w"
+	errFmtSetThemeAndExecute      = "setThemeAndExecute error: %w"
+	errFmtShutdownDevice          = "shutdown error: %w"
+	errFmtSetThemeDevice          = "error setting the theme command: %w"
 	errFmtSetScreenshotSubdirName = "error setScreenshotSubdirectoryName: %w"
-	errFmtExecuteCmd = "error executing command: %w"
-	errFmtSetEnv = "cannot set %s env to %s"
+	errFmtExecuteCmd              = "error executing command: %w"
+	errFmtSetEnv                  = "cannot set %s env to %s"
 )
 
 var invoke exec.CommandExecutor = exec.Command
@@ -160,4 +160,3 @@ func mockExecute(e exec.Executable) exec.CommandExecutor {
 		return e
 	}
 }
-
