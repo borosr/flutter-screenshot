@@ -53,8 +53,8 @@ type Device struct {
 }
 
 // Read is reading the screenshots.yaml file and returning the parsed config.Data
-func Read() (Data, error) {
-	file, err := os.Open("screenshots.yaml")
+func Read(configName string) (Data, error) {
+	file, err := os.Open(configName)
 	if err != nil {
 		return Data{}, err
 	}
