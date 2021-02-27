@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	deviceState   = "device"
+	deviceState = "device"
 )
 
 // WaitUntilBooted is waiting until virtual device booted
