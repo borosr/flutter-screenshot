@@ -16,8 +16,6 @@ import (
 
 const (
 	emuDeviceEnv = "EMU_DEVICE"
-	LightTheme   = "light"
-	DarkTheme    = "dark"
 
 	errFmtExecuteIos              = "error running iOS devices: %w"
 	errFmtCreateDevice            = "error when creating the device: %w|"
@@ -92,19 +90,19 @@ func execute(devices []config.Device, cmd string, device pkg.DeviceAction) error
 		}
 
 		switch {
-		case d.Mode == "both":
-			for _, t := range []string{DarkTheme, LightTheme} {
+		case d.Mode == config.ModeBoth.String():
+			for _, t := range config.BothModes {
 				d.Mode = t
 				if err := setThemeAndExecute(device, d, instance, cmd); err != nil {
 					loopErr = fmt.Errorf(errFmtSetThemeAndExecute, err)
 				}
 			}
 		case d.Mode == "":
-			d.Mode = LightTheme
+			d.Mode = config.ModeLight.String()
 			if err := setThemeAndExecute(device, d, instance, cmd); err != nil {
 				loopErr = fmt.Errorf(errFmtSetThemeAndExecute, err)
 			}
-		case d.Mode == LightTheme || d.Mode == DarkTheme:
+		case d.Mode == config.ModeLight.String() || d.Mode == config.ModeDark.String():
 			if err := setThemeAndExecute(device, d, instance, cmd); err != nil {
 				loopErr = fmt.Errorf(errFmtSetThemeAndExecute, err)
 			}

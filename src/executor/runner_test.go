@@ -11,7 +11,7 @@ import (
 )
 
 func TestExecuteExistingDevice(t *testing.T) {
-	for _, theme := range []string{LightTheme, DarkTheme, "both"} {
+	for _, theme := range config.AllModes {
 		ctrl := gomock.NewController(t)
 		mockDeviceAction := NewMockDeviceAction(ctrl)
 		deviceID := gofakeit.UUID()
@@ -55,12 +55,12 @@ func TestExecuteNotExistingDevice(t *testing.T) {
 	mockDeviceAction.EXPECT().Create(gomock.Eq(deviceName)).Return(deviceID, KindIos, nil)
 	mockDeviceAction.EXPECT().Boot(gomock.Eq(instance)).Return(nil)
 	mockDeviceAction.EXPECT().WaitUntilBooted(gomock.Eq(instance)).Return(nil)
-	mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Eq(LightTheme)).Return(nil)
+	mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Eq(config.ModeLight.String())).Return(nil)
 	mockDeviceAction.EXPECT().Shutdown(gomock.Eq(instance)).Return(nil)
 
 	if err := execute([]config.Device{{
 		Name: deviceName,
-		Mode: LightTheme,
+		Mode: config.ModeLight.String(),
 	}}, `echo "hello"`, mockDeviceAction); err != nil {
 		t.Error(err)
 	}
@@ -78,7 +78,7 @@ func TestExecuteDeviceCreationError(t *testing.T) {
 
 	if err := execute([]config.Device{{
 		Name: deviceName,
-		Mode: LightTheme,
+		Mode: config.ModeLight.String(),
 	}}, "", mockDeviceAction); err == nil {
 		t.Error("missing error")
 	} else if !errors.Is(err, deviceCreateError) {
@@ -105,7 +105,7 @@ func TestExecuteDeviceBootError(t *testing.T) {
 
 	if err := execute([]config.Device{{
 		Name: deviceName,
-		Mode: LightTheme,
+		Mode: config.ModeLight.String(),
 	}}, "", mockDeviceAction); err == nil {
 		t.Error("missing error")
 	} else if !errors.Is(err, bootError) {
@@ -133,7 +133,7 @@ func TestExecuteDeviceWaitForBootedError(t *testing.T) {
 
 	if err := execute([]config.Device{{
 		Name: deviceName,
-		Mode: LightTheme,
+		Mode: config.ModeLight.String(),
 	}}, "", mockDeviceAction); err == nil {
 		t.Error("missing error")
 	} else if !errors.Is(err, waitForBootedError) {
@@ -142,7 +142,7 @@ func TestExecuteDeviceWaitForBootedError(t *testing.T) {
 }
 
 func TestExecuteDeviceSetThemeError(t *testing.T) {
-	for _, theme := range []string{LightTheme, DarkTheme, "both", ""} {
+	for _, theme := range append(config.AllModes, "") {
 		ctrl := gomock.NewController(t)
 		mockDeviceAction := NewMockDeviceAction(ctrl)
 
@@ -193,12 +193,12 @@ func TestExecuteDeviceShutdown(t *testing.T) {
 	mockDeviceAction.EXPECT().Create(gomock.Eq(deviceName)).Return(deviceID, KindIos, nil)
 	mockDeviceAction.EXPECT().Boot(gomock.Eq(instance)).Return(nil)
 	mockDeviceAction.EXPECT().WaitUntilBooted(gomock.Eq(instance)).Return(nil)
-	mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Eq(LightTheme)).Return(nil)
+	mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Eq(config.ModeLight.String())).Return(nil)
 	mockDeviceAction.EXPECT().Shutdown(gomock.Eq(instance)).Return(shutdownError)
 
 	if err := execute([]config.Device{{
 		Name: deviceName,
-		Mode: LightTheme,
+		Mode: config.ModeLight.String(),
 	}}, "", mockDeviceAction); err == nil {
 		t.Error("missing error")
 	} else if !errors.Is(err, shutdownError) {
@@ -226,7 +226,7 @@ func TestExecuteDeviceCommandExecution(t *testing.T) {
 	mockDeviceAction.EXPECT().Create(gomock.Eq(deviceName)).Return(deviceID, KindIos, nil)
 	mockDeviceAction.EXPECT().Boot(gomock.Eq(instance)).Return(nil)
 	mockDeviceAction.EXPECT().WaitUntilBooted(gomock.Eq(instance)).Return(nil)
-	mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Eq(LightTheme)).Return(nil)
+	mockDeviceAction.EXPECT().SetTheme(gomock.Eq(instance), gomock.Eq(config.ModeLight.String())).Return(nil)
 	mockDeviceAction.EXPECT().Shutdown(gomock.Eq(instance)).Return(nil)
 	mockExecutable.EXPECT().Run().Return(cmdExecuteError)
 	mockExecutable.EXPECT().String().Return("")
@@ -234,7 +234,7 @@ func TestExecuteDeviceCommandExecution(t *testing.T) {
 
 	if err := execute([]config.Device{{
 		Name: deviceName,
-		Mode: LightTheme,
+		Mode: config.ModeLight.String(),
 	}}, "", mockDeviceAction); err == nil {
 		t.Error("missing error")
 	} else if !errors.Is(err, cmdExecuteError) {
