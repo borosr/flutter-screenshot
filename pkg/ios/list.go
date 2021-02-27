@@ -5,6 +5,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// List converts the parsed devices to the common format
 func (d Device) List() types.Pairs {
 	p := types.Pairs{}
 	for _, devices := range d.Config.Devices {
