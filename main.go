@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	. "github.com/borosr/flutter-screenshot/src/cmd"
+	"github.com/borosr/flutter-screenshot/src/cmd"
 	"github.com/borosr/flutter-screenshot/src/executor"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
@@ -11,18 +11,18 @@ import (
 
 var app = &cli.App{
 	Flags: []cli.Flag{
-		FlagVerbose,
-		FlagConfig,
+		cmd.FlagVerbose,
+		cmd.FlagConfig,
 	},
 	Before: func(ctx *cli.Context) error {
-		if ctx.Bool(FlagNameVerbose) {
+		if ctx.Bool(cmd.FlagNameVerbose) {
 			log.SetLevel(log.DebugLevel)
 		}
 
 		return nil
 	},
 	Action: func(ctx *cli.Context) error {
-		return executor.Run(ctx.String(FlagNameConfig))
+		return executor.Run(ctx.String(cmd.FlagNameConfig))
 	},
 }
 
