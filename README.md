@@ -1,6 +1,8 @@
 # Flutter Screenshot
 ![example workflow name](https://github.com/borosr/flutter-screenshot/workflows/Main/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/borosr/flutter-screenshot/badge.svg?branch=main)](https://coveralls.io/github/borosr/flutter-screenshot?branch=main)
+[![Go Report Card](https://goreportcard.com/badge/github.com/borosr/flutter-screenshot)](https://goreportcard.com/report/github.com/borosr/flutter-screenshot)
+[![codebeat badge](https://codebeat.co/badges/8d09cfcb-78b4-4ede-8b7a-3e520d3ba95f)](https://codebeat.co/projects/github-com-borosr-flutter-screenshot-main)
 
 A tool which helps in multi device screenshot creation for Flutter projects.
 
