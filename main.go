@@ -12,6 +12,7 @@ import (
 var app = &cli.App{
 	Commands: []*cli.Command{
 		cmd.Init,
+		cmd.Doctor,
 	},
 	Flags: []cli.Flag{
 		cmd.FlagVerbose,
