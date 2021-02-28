@@ -1,14 +1,16 @@
 package ios
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"io"
-	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/borosr/flutter-screenshot/pkg/ios/config"
 	"github.com/golang/mock/gomock"
+	log "github.com/sirupsen/logrus"
 )
 
 func TestNew(t *testing.T) {
@@ -41,7 +43,7 @@ func TestLoadConfig(t *testing.T) {
 		_, _ = w.Write(raw)
 	})
 
-	c := loadConfig()
+	c := loadConfig(true)
 	if !c.Loaded {
 		t.Error("config isn't successfully loaded")
 	}
@@ -59,11 +61,9 @@ func TestLoadConfigCmdRunError(t *testing.T) {
 		_, _ = w.Write(raw)
 	})
 
-	c := loadConfig()
-	if runtime.GOOS != "darwin" && !c.Loaded {
-		t.Error("config should be loaded on this os")
-	} else if runtime.GOOS == "darwin" && c.Loaded {
-		t.Error("config shouldn't be loaded on mac")
+	c := loadConfig(true)
+	if c.Loaded {
+		t.Error("config shouldn't be loaded")
 	}
 }
 
@@ -78,10 +78,20 @@ func TestLoadConfigInvalidFormat(t *testing.T) {
 		_, _ = w.Write([]byte("invalid json format"))
 	})
 
-	c := loadConfig()
-	if runtime.GOOS != "darwin" && !c.Loaded {
-		t.Error("config should be loaded on this os")
-	} else if runtime.GOOS == "darwin" && c.Loaded {
+	c := loadConfig(true)
+	if c.Loaded {
+		t.Error("config shouldn't be loaded")
+	}
+}
+
+func TestIsNotMac(t *testing.T) {
+	b := &bytes.Buffer{}
+	log.SetOutput(b)
+	c := loadConfig(false)
+	if !c.Loaded {
 		t.Error("config shouldn't be loaded on mac")
+	}
+	if !strings.Contains(b.String(), skippingIosSimulatorMsg) {
+		t.Errorf("Console should contains the following log: %s", skippingIosSimulatorMsg)
 	}
 }

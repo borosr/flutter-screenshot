@@ -34,8 +34,8 @@ var invoke exec.CommandExecutor = exec.Command
 // Run is the entrypoint of the tool.
 // First it reads the configurations from yaml,
 // then runs sequentially the iOS and then the Android execution
-func Run() error {
-	conf, err := config.Read()
+func Run(configName string) error {
+	conf, err := config.Read(configName)
 	if err != nil {
 		log.Error("Error when reading yaml file")
 

@@ -9,6 +9,10 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const (
+	skippingIosSimulatorMsg = "Skipping iOS simulators..."
+)
+
 var idRegex = regexp.MustCompile("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}")
 
 // Device represents the iOS device action strategy
@@ -19,13 +23,13 @@ type Device struct {
 // New is creating a new iOS device action strategy
 func New() Device {
 	return Device{
-		Config: loadConfig(),
+		Config: loadConfig(runtime.GOOS == "darwin"),
 	}
 }
 
-func loadConfig() config.Config {
-	if runtime.GOOS != "darwin" {
-		log.Info("Skipping iOS simulators...")
+func loadConfig(isMac bool) config.Config {
+	if !isMac {
+		log.Info(skippingIosSimulatorMsg)
 
 		return config.Config{Loaded: true}
 	}

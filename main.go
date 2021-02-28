@@ -1,21 +1,39 @@
 package main
 
 import (
-	"flag"
+	"os"
 
+	"github.com/borosr/flutter-screenshot/src/cmd"
 	"github.com/borosr/flutter-screenshot/src/executor"
 	log "github.com/sirupsen/logrus"
+	"github.com/urfave/cli/v2"
 )
 
-func main() {
-	v := flag.Bool("verbose", false, "") // TODO add one char alias too
-	flag.Parse()
+var app = &cli.App{
+	Commands: []*cli.Command{
+		cmd.Init,
+		cmd.Doctor,
+	},
+	Flags: []cli.Flag{
+		cmd.FlagVerbose,
+		cmd.FlagConfig,
+	},
+	Before: before,
+	Action: func(ctx *cli.Context) error {
+		return executor.Run(ctx.String(cmd.FlagNameConfig))
+	},
+}
 
-	if *v {
+func main() {
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func before(ctx *cli.Context) error {
+	if ctx.Bool(cmd.FlagNameVerbose) {
 		log.SetLevel(log.DebugLevel)
 	}
 
-	if err := executor.Run(); err != nil {
-		log.Fatal(err)
-	}
+	return nil
 }
