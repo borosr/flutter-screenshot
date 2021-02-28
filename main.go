@@ -18,13 +18,7 @@ var app = &cli.App{
 		cmd.FlagVerbose,
 		cmd.FlagConfig,
 	},
-	Before: func(ctx *cli.Context) error {
-		if ctx.Bool(cmd.FlagNameVerbose) {
-			log.SetLevel(log.DebugLevel)
-		}
-
-		return nil
-	},
+	Before: before,
 	Action: func(ctx *cli.Context) error {
 		return executor.Run(ctx.String(cmd.FlagNameConfig))
 	},
@@ -34,4 +28,12 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func before(ctx *cli.Context) error {
+	if ctx.Bool(cmd.FlagNameVerbose) {
+		log.SetLevel(log.DebugLevel)
+	}
+
+	return nil
 }

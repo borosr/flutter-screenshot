@@ -30,7 +30,7 @@ var Doctor = &cli.Command{
 }
 
 func doctor(ctx *cli.Context) error {
-	checkiOS(runtime.GOOS != "darwin")
+	checkiOS(runtime.GOOS == "darwin")
 	checkAndroid()
 
 	return nil
