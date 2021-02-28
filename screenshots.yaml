@@ -1,6 +1,0 @@
-command: echo "hello world"
-devices:
-  ios:
-  - name: iPhone X
-    mode: light
-  android: []

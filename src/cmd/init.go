@@ -10,26 +10,36 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+const (
+	exampleCommandValue = `echo "hello world"`
+	exampleDeviceName   = "iPhone X"
+)
+
 var Init = &cli.Command{
-	Name: "init",
-	Action: func(ctx *cli.Context) error {
-		filePath := ctx.String(FlagNameConfig)
-		log.Infof("Generating init file to: %s", filePath)
+	Name:   "init",
+	Action: initCmd,
+}
 
-		conf, err := yaml.Marshal(config.Data{
-			Cmd: `echo "hello world"`,
-			Devices: config.Devices{
-				IOS: []config.Device{{
-					Name: "iPhone X",
-					Mode: config.ModeLight.String(),
-				}},
-			},
-		})
-		if err != nil {
-			return err
-		}
-		log.Debugf("Exported config is: %s", string(conf))
+func initCmd(ctx *cli.Context) error {
+	return createFile(ctx.String(FlagNameConfig))
+}
 
-		return ioutil.WriteFile(filePath, conf, os.FileMode(0666))
-	},
+func createFile(filePath string) error {
+	log.Infof("Generating init file to: %s", filePath)
+
+	conf, err := yaml.Marshal(config.Data{
+		Cmd: exampleCommandValue,
+		Devices: config.Devices{
+			IOS: []config.Device{{
+				Name: exampleDeviceName,
+				Mode: config.ModeLight.String(),
+			}},
+		},
+	})
+	if err != nil {
+		return err
+	}
+	log.Debugf("Exported config is: %s", string(conf))
+
+	return ioutil.WriteFile(filePath, conf, os.FileMode(0666))
 }

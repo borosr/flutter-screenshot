@@ -2,3 +2,4 @@
 go.sum
 vendor/
 *_mock_test.go
+screenshots.yaml
