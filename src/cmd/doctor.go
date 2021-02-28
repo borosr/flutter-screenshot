@@ -10,47 +10,61 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+const (
+	checkingIosCommandsMsg     = "Checking iOS commands are on path..."
+	checkingAndroidEnvsMsg     = "Checking Android environment variables..."
+	checkingAndroidCommandsMsg = "Checking Android commands are on path..."
+
+	iosCommandXcrun = "xcrun"
+
+	androidEnvJavaHome       = "JAVA_HOME"
+	androidEnvAndroidHome    = "ANDROID_HOME"
+	androidEnvAndroidSdkRoot = "ANDROID_SDK_ROOT"
+	androidCommandEmulator   = "emulator"
+	androidCommandAdb        = "adb"
+)
+
 var Doctor = &cli.Command{
-	Name: "doctor",
+	Name:   "doctor",
 	Action: doctor,
 }
 
 func doctor(ctx *cli.Context) error {
-	checkMac()
+	checkiOS(runtime.GOOS != "darwin")
 	checkAndroid()
 
 	return nil
 }
 
-func checkMac() {
-	if runtime.GOOS != "darwin" {
+func checkiOS(isMac bool) {
+	if !isMac {
 		return
 	}
- 	log.Info("Checking iOS commands are on path...")
-	checkCmd("xcrun")
+	log.Info(checkingIosCommandsMsg)
+	checkCmd(iosCommandXcrun)
 }
 
 func checkAndroid() {
-	log.Info("Checking Android environment variables...")
-	checkEnv("JAVA_HOME")
-	checkEnv("ANDROID_HOME")
-	checkEnv("ANDROID_SDK_ROOT")
-	log.Info("Checking Android commands are on path...")
-	checkCmd("emulator")
-	checkCmd("adb")
+	log.Info(checkingAndroidEnvsMsg)
+	checkEnv(androidEnvJavaHome)
+	checkEnv(androidEnvAndroidHome)
+	checkEnv(androidEnvAndroidSdkRoot)
+	log.Info(checkingAndroidCommandsMsg)
+	checkCmd(androidCommandEmulator)
+	checkCmd(androidCommandAdb)
 }
 
 func checkEnv(env string) {
 	_, ok := os.LookupEnv(env)
-	log.Infof("%s: %s", env, getState(ok))
+	log.Infof("%s: %s", env, getResultIcon(ok))
 }
 
 func checkCmd(cmd string) {
 	_, err := exec.LookPath(cmd)
-	log.Infof("%s: %s", cmd, getState(err == nil))
+	log.Infof("%s: %s", cmd, getResultIcon(err == nil))
 }
 
-func getState(ok bool) string {
+func getResultIcon(ok bool) string {
 	if ok {
 		return emoji.Sprint(":check_mark_button:")
 	}
