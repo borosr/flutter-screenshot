@@ -3,6 +3,7 @@ package executor
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"strings"
 
 	"github.com/borosr/flutter-screenshot/pkg"
@@ -35,7 +36,7 @@ var invoke exec.CommandExecutor = exec.Command
 // First it reads the configurations from yaml,
 // then runs sequentially the iOS and then the Android execution
 func Run(configName string) error {
-	conf, err := config.Read(configName)
+	conf, err := config.Read(configName, runtime.GOOS == "darwin")
 	if err != nil {
 		log.Error("Error when reading yaml file")
 

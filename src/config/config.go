@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 )
 
@@ -53,7 +54,7 @@ type Device struct {
 }
 
 // Read is reading the screenshots.yaml file and returning the parsed config.Data
-func Read(configName string) (Data, error) {
+func Read(configName string, isMac bool) (Data, error) {
 	file, err := os.Open(configName)
 	if err != nil {
 		return Data{}, err
@@ -65,6 +66,11 @@ func Read(configName string) (Data, error) {
 	}
 	if err := yaml.Unmarshal(lines, &data); err != nil {
 		return Data{}, err
+	}
+
+	if !isMac {
+		log.Info("Skipping iOS devices from configuration")
+		data.Devices.IOS = []Device{}
 	}
 
 	return data, nil
