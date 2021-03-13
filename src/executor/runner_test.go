@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/borosr/flutter-screenshot/pkg/exec"
 	"github.com/borosr/flutter-screenshot/src/config"
 	. "github.com/borosr/flutter-screenshot/src/device/types"
 	"github.com/brianvoe/gofakeit/v6"
@@ -297,5 +298,12 @@ func TestSplitCommand(t *testing.T) {
 				t.Errorf("The sub commands output should be %v, instead of %v", c.out.subCmds, subCmds)
 			}
 		})
+	}
+}
+
+func TestExecuteCommand(t *testing.T) {
+	invoke = exec.Command
+	if err := executeCommand("echo test 123", "some_uuid"); err != nil {
+		t.Error(err)
 	}
 }
