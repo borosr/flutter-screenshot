@@ -16,3 +16,14 @@ func TestInitCmdVerbose(t *testing.T) {
 	}()
 	main()
 }
+
+func TestRunApp(t *testing.T) {
+	TestInitCmdVerbose(t)
+	os.Args = []string{"app", "--"+cmd.FlagNameVerbose}
+	defer func() {
+		if r := recover(); r != nil {
+			t.Error(r)
+		}
+	}()
+	main()
+}
