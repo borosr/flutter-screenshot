@@ -2,6 +2,7 @@ package executor
 
 import (
 	"errors"
+	"reflect"
 	"testing"
 
 	"github.com/borosr/flutter-screenshot/src/config"
@@ -239,5 +240,62 @@ func TestExecuteDeviceCommandExecution(t *testing.T) {
 		t.Error("missing error")
 	} else if !errors.Is(err, cmdExecuteError) {
 		t.Errorf("error should be %v, instead of %v", cmdExecuteError, err)
+	}
+}
+
+func TestSplitCommand(t *testing.T) {
+	type output struct {
+		cmd     string
+		subCmds []string
+	}
+	cases := []struct {
+		name string
+		in   string
+		out  output
+	}{
+		{
+			name: "empty string",
+			in:   "",
+			out: output{
+				cmd:     "",
+				subCmds: []string{},
+			},
+		},
+		{
+			name: "single command",
+			in:   "echo",
+			out: output{
+				cmd:     "echo",
+				subCmds: []string{},
+			},
+		},
+		{
+			name: "single command multiple subcommands",
+			in:   "echo asd asd asd",
+			out: output{
+				cmd:     "echo",
+				subCmds: []string{"asd", "asd", "asd"},
+			},
+		},
+		{
+			name: "single command multiple subcommands and flags",
+			in:   "echo asd asd --help -n name",
+			out: output{
+				cmd:     "echo",
+				subCmds: []string{"asd", "asd", "--help", "-n", "name"},
+			},
+		},
+	}
+	for _, c := range cases {
+		c := c
+		t.Run(c.name, func(t *testing.T) {
+			cmd, subCmds := splitCommand(c.in)
+			if cmd != c.out.cmd {
+				t.Errorf("The cmd output should be %s, instead of %s", c.out.cmd, cmd)
+			}
+			if !reflect.DeepEqual(subCmds, c.out.subCmds) {
+				t.Errorf("The sub commands output should be %v, instead of %v", c.out.subCmds, subCmds)
+			}
+		})
 	}
 }

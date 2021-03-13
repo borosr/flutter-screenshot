@@ -149,11 +149,18 @@ func setScreenshotSubdirectoryName(d config.Device) error {
 func executeCommand(cmd, deviceID string) error {
 	log.Infof("Executing command %s...", cmd)
 
-	c := invoke("/bin/sh", "-c", cmd, "-d", deviceID)
+	cmd, subCmds := splitCommand(cmd)
+	c := invoke(cmd, append(subCmds, "-d", deviceID)...)
 	log.Debugf("Execute: Executing cmd: %s", c.String())
 	c.Stdout(os.Stdout)
 
 	return c.Run()
+}
+
+func splitCommand(cmd string) (string, []string) {
+	subCmds := strings.Split(cmd, " ")
+
+	return subCmds[0], subCmds[1:]
 }
 
 func mockExecute(e exec.Executable) exec.CommandExecutor {
