@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/borosr/flutter-screenshot/pkg/exec"
 	"github.com/borosr/flutter-screenshot/src/config"
 	. "github.com/borosr/flutter-screenshot/src/device/types"
 	"github.com/brianvoe/gofakeit/v6"
@@ -301,6 +302,7 @@ func TestSplitCommand(t *testing.T) {
 }
 
 func TestExecuteCommand(t *testing.T) {
+	invoke = exec.Command
 	if err := executeCommand("echo test 123", "some_uuid"); err != nil {
 		t.Error(err)
 	}
