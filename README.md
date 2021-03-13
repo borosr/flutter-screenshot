@@ -14,11 +14,15 @@ A tool which helps in multi device screenshot creation for Flutter projects.
 5. Extend Integration tests with screenshot calls
 
 ## Usage
-### Install
-1. `go get -u -t github.com/borosr/flutter-screenshot`
-2. Create a configuration file in your Flutter project's root and name it `screenshots.yaml`, config example below
-3. Just call `flutter-screenshot` in you Flutter project's directory
-4. (Optional) Use `--verbose` after the command, to see more log messages
+### Setup
+#### Install with go modules
+`go get -u -t github.com/borosr/flutter-screenshot`
+#### Install from release
+Download one of the supported versions from [here](https://github.com/borosr/flutter-screenshot/releases). 
+
+1. Create a configuration file in your Flutter project's root and name it `screenshots.yaml`, config example below
+2. Just call `flutter-screenshot` in you Flutter project's directory
+3. (Optional) Use `--verbose` after the command, to see more log messages
 
 #### Note
 - The flutter-screenshot will set the `EMU_DEVICE` environment variable before every `flutter drive` execution,
