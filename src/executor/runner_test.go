@@ -299,3 +299,9 @@ func TestSplitCommand(t *testing.T) {
 		})
 	}
 }
+
+func TestExecuteCommand(t *testing.T) {
+	if err := executeCommand("echo test 123", "some_uuid"); err != nil {
+		t.Error(err)
+	}
+}
