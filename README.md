@@ -7,7 +7,7 @@
 A tool which helps in multi device screenshot creation for Flutter projects.
 
 ## Requirements
-1. Go 1.15 or later, to install this project
+1. Go 1.16 or later, to install this project
 2. Installed Xcode and simulator
 3. Installed Android emulator, avdmanager and adb (e.x.: [Command Line Tools](https://developer.android.com/studio#downloads))
 4. Flutter Integration tests
