@@ -23,6 +23,7 @@ jobs:
 
       - name: Run mock generation
         run: |
+          go get -v
           go get github.com/golang/mock/mockgen@v1.4.4
           make gen
 
@@ -42,6 +43,7 @@ jobs:
 
       - name: Run mock generation
         run: |
+          go get -v
           go get github.com/golang/mock/mockgen@v1.4.4
           make gen
       - name: Calc coverage
